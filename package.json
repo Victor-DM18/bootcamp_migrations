@@ -1,0 +1,15 @@
+{
+  "name": "victor_rs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Victor-DM18/bootcamp_migrations.git",
+  "author": "Victor-DM18 <victor.dosmartires@gmail.com>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "express": "^5.0.0-alpha.8",
+    "knex": "^0.95.7",
+    "nodemon": "^2.0.12",
+    "pg": "^8.6.0"
+  }
+}
