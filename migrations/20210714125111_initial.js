@@ -5,26 +5,26 @@ exports.up = async (knex) => {
         table.text("username").notNullable();
         table.text("email").notNullable();
         table.text("password").notNullable();
-        table.datetime("createdAt").notNullable().defaultTo(db.fn.now());
-        table.datetime("updatedAt").notNullable().defaultTo(db.fn.now());
-        table.datetime("deletedAt").nullable().defaultTo(db.fn.now());
+        table.datetime("createdAt").notNullable().defaultTo(knex.fn.now());
+        table.datetime("updatedAt").notNullable().defaultTo(knex.fn.now());
+        table.datetime("deletedAt").nullable().defaultTo(knex.fn.now());
     })
     await knex.schema.createTable("posts", (table) => {
         table.increments("id");
         table.text("content").notNullable();
-        table.datetime("createdAt").notNullable().defaultTo(db.fn.now());
-        table.datetime("updatedAt").notNullable().defaultTo(db.fn.now());
-        table.datetime("deletedAt").nullable().defaultTo(db.fn.now());
+        table.datetime("createdAt").notNullable().defaultTo(knex.fn.now());
+        table.datetime("updatedAt").notNullable().defaultTo(knex.fn.now());
+        table.datetime("deletedAt").nullable().defaultTo(knex.fn.now());
         table.integer("userId").unsigned().notNullable();
         
         table.foreign("userId").references("id").inTable("users");
     })
     await knex.schema.createTable("comments", (table) => {
         table.increments("id");
-        table.text("contents").nitNullable();
-        table.datetime("createdAt").notNullable().defaultTo(db.fn.now());
-        table.datetime("updatedAt").notNullable().defaultTo(db.fn.now());
-        table.datetime("deletedAt").nullable().defaultTo(db.fn.now());
+        table.text("contents").notNullable();
+        table.datetime("createdAt").notNullable().defaultTo(knex.fn.now());
+        table.datetime("updatedAt").notNullable().defaultTo(knex.fn.now());
+        table.datetime("deletedAt").nullable().defaultTo(knex.fn.now());
         table.integer("userId").unsigned().notNullable();
         table.integer("postId").unsigned().notNullable();
 
