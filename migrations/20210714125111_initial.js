@@ -8,7 +8,7 @@ exports.up = async (knex) => {
         table.datetime("createdAt").notNullable().defaultTo(db.fn.now());
         table.datetime("updatedAt").notNullable().defaultTo(db.fn.now());
         table.datetime("deletedAt").nullable().defaultTo(db.fn.now());
-    });
+    })
     await knex.schema.createTable("posts", (table) => {
         table.increments("id");
         table.text("content").notNullable();

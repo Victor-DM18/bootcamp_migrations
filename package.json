@@ -6,6 +6,10 @@
   "author": "Victor-DM18 <victor.dosmartires@gmail.com>",
   "license": "UNLICENSED",
   "private": true,
+  "scripts": {
+    "start": "env `cat .env.local` nodemon index.js",
+    "knex": "env `cat .env.local` knex"
+  },
   "dependencies": {
     "express": "^5.0.0-alpha.8",
     "knex": "^0.95.7",
