@@ -52,6 +52,20 @@ app.get("/posts", async (req, res) => {
     res.send(await db("posts"));
 });
 
+app.get('/posts/:id', async (req, res) => {
+    const {
+        params: { id },
+    } = req;
+    const[post] = await db("posts").where({ id });
+
+    if (!post) {
+        res.status(404).send({ error: "doesn't exist"});
+
+        return;
+    }
+    res.send(post);
+})
+
 app.post("/posts", async (req, res) => {
     const {
         body: { content },
@@ -72,4 +86,45 @@ app.put("/posts/:id", async (req, res) => {
 
     res.send(post);
 })
+
+app.get("/comments", async (req, res) => {
+    res.send(await db("comments"));
+})
+
+app.get("/comments/:id", async (req, res) => {
+    const {
+        params: { id },
+    }= req;
+    const[comment] = await db("comments").where({ id });
+
+    if (!comment) {
+
+        res.status(404).send({ error: "doesn't exist"});
+
+        return;
+    }
+    res.send(comment);
+})
+
+app.post("/comments", async (req, res) => {
+    const {
+        body: { content }
+    }= req;
+
+    const comment = await db("comments").insert({ cntent }).returning("*");
+
+    res.send(comment);
+})
+
+app.put("/comments", async (req, res) => {
+    const {
+        params: { id },
+        body: { content },
+    } = req;
+
+    const [comment] = await db("conmment").where({ id }).update({ content }).returning("*");
+
+    res.send(comment);
+})
+
 app.listen(3000)

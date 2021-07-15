@@ -21,7 +21,7 @@ exports.up = async (knex) => {
     })
     await knex.schema.createTable("comments", (table) => {
         table.increments("id");
-        table.text("contents").notNullable();
+        table.text("content").notNullable();
         table.datetime("createdAt").notNullable().defaultTo(knex.fn.now());
         table.datetime("updatedAt").notNullable().defaultTo(knex.fn.now());
         table.datetime("deletedAt").nullable().defaultTo(knex.fn.now());
