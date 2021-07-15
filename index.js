@@ -48,6 +48,16 @@ app.put("/users/:id", async (req, res) => {
 
 })
 
+app.delete("/users/:id", async (req, res) => {
+    const {
+        params: { id },
+        body: { usename, email, password},
+        } = req;
+
+        const user = await("isers").where({     id }).splice({usename, email, password});
+
+})
+
 app.get("/posts", async (req, res) => {
     res.send(await db("posts"));
 });

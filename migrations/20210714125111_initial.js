@@ -7,14 +7,14 @@ exports.up = async (knex) => {
         table.text("password").notNullable();
         table.datetime("createdAt").notNullable().defaultTo(knex.fn.now());
         table.datetime("updatedAt").notNullable().defaultTo(knex.fn.now());
-        table.datetime("deletedAt").nullable().defaultTo(knex.fn.now());
+        table.datetime("deletedAt").nullable();
     })
     await knex.schema.createTable("posts", (table) => {
         table.increments("id");
         table.text("content").notNullable();
         table.datetime("createdAt").notNullable().defaultTo(knex.fn.now());
         table.datetime("updatedAt").notNullable().defaultTo(knex.fn.now());
-        table.datetime("deletedAt").nullable().defaultTo(knex.fn.now());
+        table.datetime("deletedAt").nullable();
         table.integer("userId").unsigned().notNullable();
         
         table.foreign("userId").references("id").inTable("users");
@@ -24,7 +24,7 @@ exports.up = async (knex) => {
         table.text("content").notNullable();
         table.datetime("createdAt").notNullable().defaultTo(knex.fn.now());
         table.datetime("updatedAt").notNullable().defaultTo(knex.fn.now());
-        table.datetime("deletedAt").nullable().defaultTo(knex.fn.now());
+        table.datetime("deletedAt").nullable();
         table.integer("userId").unsigned().notNullable();
         table.integer("postId").unsigned().notNullable();
 
