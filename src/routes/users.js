@@ -1,89 +1,76 @@
-const usersRoute =(app, { db }) => {
+const usersRoute = (app, { db }) => {
+  app.get("/users", async (req, res) => {
+    res.send(await db("users"));
+  });
 
-app.get("/users", async (req, res) => {
-  res.send(await db("users"));
-});
+  app.get("users/:id", async (req, res, next) => {
+    const {
+      params: { id },
+    } = req;
 
-app.get("users/:id", async (req, res) => {
-  const {
-    params: { id },
-  } = req;
+    try {
+      const [user] = await db("users").where({ id });
 
-  try {
-    const [user] = await db("users").where({ id });
+      if (!user) {
+        res.status(404).send({ error: "doesn't exist" });
 
-    if (!user) {
-      res.status(404).send({ error: "doesn't exist" });
+        return;
+      }
 
-      return;
+      res.send(user);
+    } catch (err) {
+      next(err);
     }
+  });
 
-    res.send(user);
-  } 
-  catch (err) {
-    next(err);
+  app.post("/users", async (req, res, next) => {
+    const {
+      body: { username, email, password },
+    } = req;
 
-    return;
-  }
-});
+    try {
+      const user = await db("users")
+        .insert({ username, email, password })
+        .returning("*");
 
-app.post("/users", async (req, res) => {
-  const {
-    body: { usename, email, password },
-  } = req;
+      res.send(user);
+    } catch (err) {
+      next(err);
+    }
+  });
 
-  try {
+  app.put("/users/:id", async (req, res, next) => {
+    const {
+      params: { id },
+      body: { username, email, password },
+    } = req;
 
-  const user = await db("users").insert({ usename, email, password });
+    try {
+      const [user] = await db("users")
+        .where({ id })
+        .update({ username, email, password })
+        .returning("*");
 
-  res.send(user);
-  }
-  catch(err) {
-    next(err);
-  }
-});
+      res.send(user);
+    } catch (err) {
+      next(err);
+    }
+  });
 
-app.put("/users/:id", async (req, res) => {
-  const {
-    params: { id },
-    body: { usename, email, password },
-  } = req;
+  app.delete("/users/:id", async (req, res, next) => {
+    const {
+      params: { id },
+      body: { username, email, password },
+    } = req;
 
-  try {
+    try {
+      const user = await db("users").where({ id }).delete().returning("*");
 
-  const [user] = await db("users")
-    .where({ id })
-    .update({ usename, email, password })
-    .returning("*");
-
-  res.send(user);
-  }
-  catch(err) {
-    next(err);
-
-    return;
-  }
-});
-
-app.delete("/users/:id", async (req, res) => {
-  const {
-    params: { id },
-    body: { usename, email, password },
-  } = req;
-
-  try {
-
-  const user = await db("users").where({ id }).delete().returning("*");
-
-  res.send(user);
-  }
-  catch(err) {
-    next(err);
-
-    return;
-  }
-});
-
+      res.send(user);
+    } catch (err) {
+      next(err);
+    }
+  });
 };
 
 module.exports = usersRoute;

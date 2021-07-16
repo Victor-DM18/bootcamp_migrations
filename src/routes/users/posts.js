@@ -1,81 +1,76 @@
 const postsRoute = (app, { db }) => {
-
   app.get("/posts", async (req, res) => {
     res.send(await db("posts"));
   });
 
-  app.get("/users/:userId/posts/:id", async (req, res) => {
+  app.get("/users/:userId/posts/:postId", async (req, res, next) => {
     const {
-      params: { id, userId },
+      params: { postId, userId },
     } = req;
 
     try {
-      const [post] = await db("posts").where({ userId, id });
+      const [post] = await db("posts").where({ userId, postId });
 
       if (!post) {
         res.status(404).send({ error: "doesn't exist" });
 
         return;
       }
+
       res.send(post);
     } catch (err) {
       next(err);
-
-      return;
     }
   });
 
-  app.post("/users/:userId/posts", async (req, res) => {
+  app.post("/users/:userId/posts", async (req, res, next) => {
     const {
       params: { userId },
       body: { content },
     } = req;
 
     try {
-      const post = await db("posts").insert({ userId, content });
+      const post = await db("posts").insert({ userId, content }).returning("*");
 
       res.send(post);
     } catch (err) {
       next(err);
-
-      return;
     }
   });
 
-  app.put("/users/:userId/posts/:id", async (req, res) => {
+  app.put("/users/:userId/posts/:postId", async (req, res, next) => {
     const {
-      params: { id, userId },
+      params: { postId, userId },
       body: { content },
     } = req;
 
     try {
       const [post] = await db("posts")
-        .where({ id })
-        .update({ userId, postId, content })
+        .where({ id: postId, userId, postId })
+        .update({ content })
         .returning("*");
 
       res.send(post);
     } catch (err) {
       next(err);
-
-      return;
     }
   });
 
-  app.delete("/users/:userId/posts/:id", async (req, res) => {
+  app.delete("/users/:userId/posts/:postId", async (req, res, next) => {
     const {
-      params: { userId, id },
+      params: { userId, postId },
       body: { content },
     } = req;
 
     try {
-      const post = await db("posts").where({ id }).delete().returning("*");
+      const post = await db("posts")
+        .where({ id: postId })
+        .delete()
+        .returning("*");
 
       res.send(post);
     } catch (err) {
       next(err);
-
-      return;
     }
   });
 };
